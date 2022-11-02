@@ -1,0 +1,78 @@
+body{
+    background-color: rgb(41, 41, 41);
+    color: rgb(161, 161, 161);
+}
+
+h1{
+    color: black;
+}
+
+h2{
+    color: black;
+}
+
+.container{
+    display: flex;
+    align-content: space-between;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#listOfProducts{
+    display: flex;
+    padding-left: 150px;
+}
+
+h1{
+    margin: 0px;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+
+h2{
+    margin: 0px;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#insertButton{
+    cursor: pointer;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-left: 7px;
+    padding-right: 7px;
+}
+#addButton{
+    cursor: pointer;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-left: 7px;
+    padding-right: 7px;
+}
+#showButton{
+    cursor: pointer;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-left: 7px;
+    padding-right: 7px;
+}
+#inverseButton{
+    cursor: pointer;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-left: 7px;
+    padding-right: 7px;
+}
+#searchButton{
+    cursor: pointer;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-left: 7px;
+    padding-right: 7px;
+}
+#deleteButton{
+    cursor: pointer;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-left: 7px;
+    padding-right: 7px;
+}

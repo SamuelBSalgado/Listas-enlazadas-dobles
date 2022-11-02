@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listas enlazadas dobles</title>
+    <script src="inventory.js"></script>
+    <script src="product.js"></script>
+    <script src="functions.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <!-- <script>
+        alert("Bienvenido al inventario");
+    </script> -->
+</head>
+<h1>Inventory</h1>
+<h2>Francisco Samuel Becerra Salgado</h2>
+<form id="frm">
+    <div class="container">
+        <div class="productInfo"> <!-- Div que abarca todo el apartado del ingreso de información de productos -->
+            <label for="name">
+                Product's name:
+                <input type="text" id="nameInput">
+            </label>
+
+            <br><br>
+
+            <label for="code">
+                Product's code:
+                <input type="text" id="codeInput">
+            </label>
+
+            <br><br>
+
+            <label for="price">
+                Product's price:
+                <input type="text" id="priceInput">
+            </label>
+
+            <br><br>
+
+            <label for="quantity">
+                Quantity:
+                <input type="text" id="quantityInput">
+            </label>
+
+            <br><br>
+
+            <!-- <label for="insert">
+                Insert into position:
+                <input type="number" id="positionInput">
+                <button type="button" id="insertButton">Insert</button>
+            </label> -->
+
+            <!-- Botones -->
+            <button type="button" id="addButton">Add product</button>
+            <br><br>
+            <button type="button" id="showButton">List products</button>
+            <br><br>
+            <button type="button" id="inverseButton">List backwards</button>
+            <br><br>
+            <button type="button" id="searchButton">Search product (by code)</button>
+            <br><br>
+            <button type="button" id="deleteButton">Delete product (by code)</button>
+        </div>
+
+        <!-- Apartado en el que aparecerá la lista de productos -->
+        <div id="listOfProducts">
+            
+        </div>
+    </div>
+</form>
+<body>
+    <script>
+        /* Declarando el objeto inventario, los botones que trabajan en él en conjunto a sus métodos y la sección de
+        muestreo en orden cronológico según la interfaz gráfica. */
+        const inventory = new Inventory(); //constante Objeto inventario
+        // const insertButton = document.getElementById('insertButton'); //constante Botón insertar en cierta posición
+        const addButton = document.getElementById('addButton'); //constante Botón añadir
+        const showButton = document.getElementById('showButton'); //constante Botón mostrar listado ordenado de productos
+        const inverseButton = document.getElementById('inverseButton'); /*constante Botón mostrar listado invertido de
+                                                                        productos*/
+        const searchButton = document.getElementById('searchButton'); //constante Botón buscar
+        const deleteButton = document.getElementById('deleteButton'); //constante Botón borrar
+        const showSection = document.getElementById('listOfProducts'); //constante Sección para mostrar productos guardados
+
+
+        /* <---- INSTRUCCIONES QUE DEBEN EJECUTAR LOS BOTONES, POR ORDEN CRONOLÓGICO SEGÚN LA INTERFAZ GRÁFICA ----> */
+
+        //Instrucciones de lo que debe hacer el botón insertar (insert) al ser presionado.
+        // insertButton.addEventListener('click', () => {
+        //     let nameInput = document.getElementById('nameInput').value; //Se guarda el valor puesto en el input nombre
+        //     let codeInput = document.getElementById('codeInput').value; //Se guarda el valor puesto en el input código
+        //     let positionInput = parseInt(document.getElementById('positionInput').value); /*Se guarda el valor numérico
+        //                                                                                     puesto en el input posición.*/
+        //     inventory.insert(codeInput, positionInput); /*Se llama al método insertar de la clase Inventario
+        //                                                 tomando en cuenta como parámetros los valores puestos
+        //                                                 en los input de código e Insert into position*/
+        //     showSection.innerHTML = ''; //Se limpia la sección de muestreo para después poner la actualizada.
+        //     showSection.innerHTML = inventory.list(); //Se muestra la lista actualizada.
+        //     //Se borra lo puesto en los inputs para no saturar.
+        //     document.getElementById('nameInput').value = '';
+        //     document.getElementById('codeInput').value = '';
+        //     document.getElementById('priceInput').value = '';
+        //     document.getElementById('quantityInput').value = '';
+        //     document.getElementById('positionInput').value = '';
+        // });
+
+        // Instrucciones de qué debe hacer el botón añadir (add) al ser presionado.
+        addButton.addEventListener('click', () => {
+            //Guardamos en variables los valores que se ingresen a los inputs nombre, código, precio y cantidad.
+            let nameInput = document.getElementById('nameInput').value;
+            let codeInput = parseInt(document.getElementById('codeInput').value);
+            let priceInput = document.getElementById('priceInput').value;
+            let quantityInput = document.getElementById('quantityInput').value;
+            //Crear un nuevo producto con todos los valores posibles.
+            const product = new Product(nameInput, codeInput, priceInput, quantityInput);
+            showSection.innerHTML = '';
+            if(!nameInput || !codeInput || !priceInput || !quantityInput){
+                showSection.innerHTML = "Llene todos los datos solicitados para agregar";
+            } else{
+                inventory.agregar(product);
+                //Limpiar los inputs después de haber dado clic en añadir (add).
+                document.getElementById('nameInput').value = '';
+                document.getElementById('codeInput').value = '';
+                document.getElementById('priceInput').value = '';
+                document.getElementById('quantityInput').value = '';
+                // document.getElementById('positionInput').value = '';
+                showSection.innerHTML = ''; //Limpia la sección de muestreo para evitar saturación.
+                showSection.innerHTML = 'El producto se añadió con éxito';
+                timedSuccessMessage();//Función que limpia el mensaje de éxito tras 2 segundos.
+            }
+        });
+
+        // Instrucciones de qué debe hacer el botón mostrar (show product list) al ser presionado.
+        showButton.addEventListener('click', () => {
+            //Borrar los valores en los inputs para no saturar.
+            document.getElementById('nameInput').value = '';
+            document.getElementById('codeInput').value = '';
+            document.getElementById('priceInput').value = '';
+            document.getElementById('quantityInput').value = '';
+            // document.getElementById('positionInput').value = '';
+            /*Al presionar el botón List products, se debe borrar lo impreso anteriormente y volver a imprimir
+            una nueva lista actualizada*/
+            showSection.innerHTML = ''; //Se borra lo impreso en la sección de muestreo para actualizarla.
+            showSection.innerHTML = inventory.listar(); //Ahora se imprime una lista actualizada.
+        });
+
+        // Instrucciones de qué debe hacer el botón invertir lista de productos (invert product list) al ser presionado.
+        inverseButton.addEventListener('click', () => {
+            //Borrar los valores en los inputs para no saturar.
+            document.getElementById('nameInput').value = '';
+            document.getElementById('codeInput').value = '';
+            document.getElementById('priceInput').value = '';
+            document.getElementById('quantityInput').value = '';
+            // document.getElementById('positionInput').value = '';
+            showSection.innerHTML = ''; //Se borra la lista original previamente impresa para después imprimirlo invertido
+            showSection.innerHTML = inventory.listarInverso(); /*Se llama a la función showInverted que devuelve los valores del array listados
+                                        de manera descendente, sin cambiar el orden del array. */
+        });
+
+        // Instrucciones de qué debe hacer el botón buscar (search button) al ser presionado.
+        searchButton.addEventListener('click', () => {
+            let codeInput = parseInt(document.getElementById('codeInput').value);/*Guardamos el código para usarlo más
+                                                                                    adelante.*/
+            //Borrar los valores en los inputs para no saturar.
+            document.getElementById('nameInput').value = '';
+            document.getElementById('codeInput').value = '';
+            document.getElementById('priceInput').value = '';
+            document.getElementById('quantityInput').value = '';
+            // document.getElementById('positionInput').value = '';
+            showSection.innerHTML = ''; //Se limpia lo impreso en la zona de muestreo para evitar saturación.
+            let query = inventory.buscar(codeInput); //Se guarda el resultado de la búsqueda.
+            //Validación de búsqueda
+            if(query == null){
+                showSection.innerHTML = 'El producto que usted buscó no existe <br>';
+            } else{
+                showSection.innerHTML = 'Producto encontrado: ' + JSON.stringify(query) + '<br>';
+            }
+        });
+
+        // Instrucciones de qué debe hacer el botón borrar (delete product) al ser presionado.
+        deleteButton.addEventListener('click', () => {
+            let codeInput = parseInt(document.getElementById('codeInput').value); /*Se guarda el valor de lo ingresado en el code
+                                                                        input*/
+            //Se borra lo escrito en los input para que quede limpio.
+            document.getElementById('nameInput').value = '';
+            document.getElementById('codeInput').value = '';
+            document.getElementById('priceInput').value = '';
+            document.getElementById('quantityInput').value = '';
+            // document.getElementById('positionInput').value = '';
+            showSection.innerHTML = ''; //Se borra lo impreso en la zona de muestreo para evitar la saturación.
+            let query = inventory.eliminar(codeInput); //Se guarda el valor de la búsqueda con la función borrar aplicada.
+            //Mensaje
+            showSection.innerHTML = 'El producto: ' + JSON.stringify(query) + ' se eliminó.';
+        });
+    </script>
+</body>
+</html>
